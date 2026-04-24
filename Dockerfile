@@ -1,13 +1,12 @@
-FROM jrottenberg/ffmpeg:4.4-ubuntu2204
+FROM python:3.11-slim
+
+RUN apt-get update && apt-get install -y ffmpeg && \
+    apt-get clean && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 
-RUN apt-get update && \
-    apt-get install -y python3 python3-pip && \
-    apt-get clean && rm -rf /var/lib/apt/lists/*
-
 COPY . .
 
-RUN pip3 install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
-CMD ["python3", "main.py"]
+CMD ["python", "main.py"]
