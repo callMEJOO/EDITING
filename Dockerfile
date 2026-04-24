@@ -2,9 +2,13 @@ FROM python:3.11-slim
 
 WORKDIR /app
 
-COPY . /app
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends ffmpeg && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
-RUN apt update && apt install -y ffmpeg
-RUN pip install --no-cache-dir -r bot/requirements.txt
+COPY . .
 
-CMD ["python", "bot/main.py"]
+RUN pip install --no-cache-dir -r requirements.txt
+
+CMD ["python", "bot.py"]
