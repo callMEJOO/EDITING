@@ -7,56 +7,45 @@ from aiogram import Bot, Dispatcher
 
 from config import TOKEN
 
-# Handlers
-from handlers.start import router as start_router
-from handlers.video import router as video_router
-from handlers.callbacks import router as callback_router
-from handlers.admin import router as admin_router
+# routers
+from start import router as start_router
+from video import router as video_router
+from admin import router as admin_router
+from callbacks import router as callbacks_router
 
-# =========================
-# LOGGING
-# =========================
+
+# ==================================
+# Logging
+# ==================================
 logging.basicConfig(
     level=logging.INFO,
-    format="%(asctime)s - %(levelname)s - %(message)s"
+    format="%(asctime)s | %(levelname)s | %(message)s"
 )
 
-# =========================
-# BOT / DISPATCHER
-# =========================
-bot = Bot(token=TOKEN)
-dp = Dispatcher()
 
-# =========================
-# INCLUDE ROUTERS
-# =========================
-dp.include_router(start_router)
-dp.include_router(video_router)
-dp.include_router(callback_router)
-dp.include_router(admin_router)
-
-# =========================
-# STARTUP / SHUTDOWN
-# =========================
-async def on_startup():
-    print("🟢 Bot Started Successfully")
-
-async def on_shutdown():
-    print("🔴 Bot Stopped")
-
-# =========================
-# MAIN
-# =========================
+# ==================================
+# Main Function
+# ==================================
 async def main():
-    await on_startup()
+    bot = Bot(token=TOKEN)
+    dp = Dispatcher()
 
-    try:
-        await dp.start_polling(bot)
-    finally:
-        await on_shutdown()
+    # تسجيل الراوترات
+    dp.include_router(start_router)
+    dp.include_router(video_router)
+    dp.include_router(admin_router)
+    dp.include_router(callbacks_router)
 
-# =========================
-# RUN
-# =========================
+    logging.info("Bot Started Successfully")
+
+    await dp.start_polling(bot)
+
+
+# ==================================
+# Start App
+# ==================================
 if __name__ == "__main__":
-    asyncio.run(main())
+    try:
+        asyncio.run(main())
+    except KeyboardInterrupt:
+        print("Bot Stopped")
