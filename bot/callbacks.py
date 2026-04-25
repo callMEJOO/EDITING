@@ -4,7 +4,7 @@ import os
 import asyncio
 
 from aiogram import Router, F
-from aiogram.types import CallbackQuery
+from aiogram.types import CallbackQuery, FSInputFile
 
 from config import (
     OUTPUT_DIR,
@@ -114,8 +114,10 @@ async def quality_callback(call: CallbackQuery):
     await process.communicate()
 
     if os.path.exists(output_path):
+        video_file = FSInputFile(output_path)
+
         await call.message.answer_video(
-            video=open(output_path, "rb"),
+            video=video_file,
             caption=DONE_TEXT
         )
     else:
