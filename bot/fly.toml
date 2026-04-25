@@ -1,0 +1,15 @@
+app = "editing-bot"
+primary_region = "iad"
+
+[build]
+
+[processes]
+app = "python main.py"
+
+[[vm]]
+cpu_kind = "shared"
+cpus = 1
+memory = "1gb"
+
+[env]
+PYTHONUNBUFFERED = "1"
